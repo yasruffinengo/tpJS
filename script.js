@@ -1,59 +1,52 @@
 // []
 
 const bebidas = [
-    { id: 10, alcohol: false, nombre: "paso de los toros", precio: 332, stock: 100 },
-    { id: 11, alcohol: false, nombre: "coca cola", precio: 409, stock: 100 },
-    { id: 12, alcohol: false, nombre: "sprite", precio: 409, stock: 100 },
-    { id: 13, alcohol: false, nombre: "jugo baggio", precio: 241, stock: 100 },
-    { id: 15, alcohol: true, nombre: "fernet", precio: 1400, stock: 100 },
-    { id: 16, alcohol: true, nombre: "gin tonic", precio: 2100, stock: 0 },
-    { id: 17, alcohol: true, nombre: "vino", precio: 1780, stock: 100 },
-    { id: 18, alcohol: true, nombre: "vodka", precio: 1600, stock: 100 }
+    { id: 10, alcohol: false, nombre: "paso de los toros", precio: 332, imgUrl: "http://d3ugyf2ht6aenh.cloudfront.net/stores/001/144/141/products/pomelo_15001-11db1e72f3a389542916071101037250-640-0.png", stock: 100 },
+    { id: 11, alcohol: false, nombre: "coca cola", precio: 409, imgUrl: "https://www.casa-segal.com/wp-content/uploads/2020/03/coca-cola-225L-almacen-gaseosas-casa-segal-mendoza-600x600.jpg", stock: 100 },
+    { id: 12, alcohol: false, nombre: "sprite", precio: 409, imgUrl: "https://www.rimoldimayorista.com.ar/datos/uploads/mod_catalogo/31308/sprite-1-5-lts-6062114db4442.png", stock: 100 },
+    { id: 13, alcohol: false, nombre: "jugo baggio", precio: 241, imgUrl: "https://www.conradomarket.com.ar/images/000000000010900485969BEBIDAS-BAGGIO-Jugo-de-Naranja-x-1.jpg", stock: 100 },
+    { id: 15, alcohol: true, nombre: "fernet", precio: 1400, imgUrl: "https://cdn11.bigcommerce.com/s-720fd/images/stencil/2560w/products/872/794/Fernet_Branca__98772.1541077705.jpg?c=2", stock: 100 },
+    { id: 16, alcohol: true, nombre: "gin tonic", precio: 2100, imgUrl: "https://vinotecalavia.com/4908-thickbox_default/gin-gordons.jpg", stock: 100 },
+    { id: 17, alcohol: true, nombre: "vino", precio: 1780, imgUrl: "https://ardiaprod.vtexassets.com/arquivos/ids/227190/Vino-Tinto-Estancia-Mendoza-Malbec-Cabernet-01-750-Ml-_1.jpg?v=637929053385630000", stock: 100 },
+    { id: 18, alcohol: true, nombre: "vodka", precio: 1600, imgUrl: "http://cdn.shopify.com/s/files/1/0557/2093/5599/products/VODKA-SMIRNOFF-ORIGINAL-700ML-UNIDAD_e4b52f_13957.jpg?v=1627078615", stock: 100 }
 ]
 
-alert("BIENVENIDO/A A LA TIENDA ONLINE DE BEBIDAS")
+let contenedorBebidas = document.getElementById("contenedorBebidas")
 
-let precioConDescuento = 0
-let cantidadPedida = 0
-let precioMismaBebida = 0
-let precioTotal = 0
+renderizarBebidas(bebidas)
 
-function descuento(){
-    precioConDescuento = precioTotal - (precioTotal * 0.1)
-}
+function renderizarBebidas(arrayBebidas){
+    contenedorBebidas.innerHTML = " "
+    for (const bebida of arrayBebidas) {
+        let tarjetaBebida = document.createElement("div")
+        tarjetaBebida.className = "bebida"
+        tarjetaBebida.innerHTML = `
+        <h3>${bebida.nombre}</h3>
+        <img src=${bebida.imgUrl}>
+        <h4>$${bebida.precio}</h4>
+        <h4>Quedan ${bebida.stock} unidades</h4>
+        <button id= ${bebida.id} class="botonCarrito">Agregar al carrito</button>
+        `
 
-
-let bebidasEnStock = bebidas.filter(bebida => bebida.stock>0)
-bebidasEnStock = bebidasEnStock.map(bebida => (bebida.nombre))
-alert("Hay " + bebidasEnStock.join(", ") + " en stock.")
-
-let rta = prompt("Desea comprar alguna bebida? (si/no)").toLowerCase()
-while(rta != "si" && rta != "no"){
-    alert("respuesta inválida")
-    rta = prompt("Desea comprar alguna bebida? (si/no)").toLowerCase()
-}
-while(rta=="si"){
-    let bebidaIngresada = prompt("Qué bebida quiere compar?")
-    let bebidaBuscada = bebidas.find(bebida => bebida.nombre == bebidaIngresada)
-    if (bebidaBuscada){
-        cantidadPedida = parseInt(prompt("Cuesta $" + bebidaBuscada.precio + ". Cuantas desea?"))
-        precioMismaBebida = bebidaBuscada.precio * cantidadPedida
-        precioTotal = precioTotal + precioMismaBebida
-        rta = prompt("Desea comprar otra bebida? (si/no)")
+        tarjetaBebida.id = bebida.id
+        contenedorBebidas.append(tarjetaBebida)
     }
-    if (rta != "si" && rta != "no"){
-        alert("Respuesta inválida")
-        rta = prompt("Desea comprar otra bebida? (si/no)")
+    let botones = document.getElementsByClassName("botonCarrito")
+    for (const boton of botones) {
+        boton.addEventListener("click", funcionBoton)
     }
 }
-if(rta == "no"){
-    if(precioTotal < 6500){
-        alert("Usted debe abonar $" + precioTotal)
-    }
-    else{
-        descuento()
-        alert("Obtiene un 10% de descuento por superar los $6500. Debe abonar $" + precioConDescuento)
-    }
+function funcionBoton(e){
+    console.dir(e.target.id)
+}
+
+let input = document.getElementById("input")
+input.addEventListener("input", funcionInput)
+
+function funcionInput(event) {
+  console.log(event) //no se
+  let bebidasFiltradas = bebidas.filter(bebida => bebida.nombre.includes(input.value))
+  renderizarBebidas(bebidasFiltradas) //esto falta editar y entender
 }
 
 

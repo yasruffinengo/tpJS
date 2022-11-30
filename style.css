@@ -1,0 +1,21 @@
+
+.bebida{
+    margin-top: 1em;
+    border: 1px solid black;
+    background-color: lightgreen;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.bebida img{
+    width: 160px;
+    height: 180px;
+}
+
+/* #contenedorBebidas{
+    background-color: lightgreen;
+} */
