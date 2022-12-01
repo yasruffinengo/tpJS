@@ -12,7 +12,14 @@ const bebidas = [
 ]
 
 let contenedorBebidas = document.getElementById("contenedorBebidas")
+let carrito = document.getElementById("carrito")
+let arrayCarrito = [ ]
 
+if(localStorage.getItem("carrito")){
+    arrayCarrito = JSON.parse(localStorage.getItem("carrito"))
+}
+
+renderizarCarrito()
 renderizarBebidas(bebidas)
 
 function renderizarBebidas(arrayBebidas){
@@ -33,20 +40,54 @@ function renderizarBebidas(arrayBebidas){
     }
     let botones = document.getElementsByClassName("botonCarrito")
     for (const boton of botones) {
-        boton.addEventListener("click", funcionBoton)
+        boton.addEventListener("click", agregarCarrito)
     }
-}
-function funcionBoton(e){
-    console.dir(e.target.id)
+
 }
 
+///BUSCADOR
 let input = document.getElementById("input")
 input.addEventListener("input", funcionInput)
 
 function funcionInput(event) {
-  console.log(event) //no se
+  console.log(event)
   let bebidasFiltradas = bebidas.filter(bebida => bebida.nombre.includes(input.value))
-  renderizarBebidas(bebidasFiltradas) //esto falta editar y entender
+  renderizarBebidas(bebidasFiltradas)
+}
+
+////CARRITO
+function agregarCarrito(e){
+    let idBebidaBuscada = (e.target.id)
+    let bebidaBuscada = bebidas.find(bebida => bebida.id == idBebidaBuscada)
+    let posicionBebida = arrayCarrito.findIndex(bebida => bebida.id == idBebidaBuscada)
+    if(posicionBebida != -1){
+        arrayCarrito[posicionBebida] = {
+            id: arrayCarrito[posicionBebida].id, nombre: arrayCarrito[posicionBebida].nombre, precio: arrayCarrito[posicionBebida].precio, subtotal: arrayCarrito[posicionBebida].precio * (arrayCarrito[posicionBebida].cantidad + 1), cantidad: arrayCarrito[posicionBebida].cantidad + 1
+        }
+    } else{
+        arrayCarrito.push({
+        id: bebidaBuscada.id, nombre: bebidaBuscada.nombre, precio: bebidaBuscada.precio, subtotal: bebidaBuscada.precio, cantidad: 1
+    })
+    }
+
+    ///LOCALSTORAGE
+    let carritoJSON = JSON.stringify(arrayCarrito)
+    localStorage.getItem("carrito", carritoJSON)
+
+    renderizarCarrito()
+}
+
+function renderizarCarrito() {
+    carrito.innerHTML = " "
+    for (const itemCarrito of arrayCarrito) {
+        carrito.innerHTML += `
+        <div class = "contenedorCarrito">
+          <h4>${itemCarrito.nombre}</h4>
+          <h4>${itemCarrito.cantidad}</h4>
+          <h4>${itemCarrito.subtotal}</h4>
+        </div>
+    `
+    }
 }
 
 
